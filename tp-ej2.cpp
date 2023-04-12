@@ -7,6 +7,8 @@ int C;
 
 void operaciones(vector<int> v, int ind, int r, int m){
 
+    
+
     int resto = v[0]%m;
     
     

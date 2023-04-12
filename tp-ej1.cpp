@@ -11,7 +11,7 @@ using namespace std;
 vector<int> candidatos;
 vector<int> sumas;
 const float infinity = numeric_limits<float>::infinity();
-vector<int> todos ;
+vector<vector<int>> todos ;
 
 int cuadradoMagicoConPodaK(vector<vector<int>> &cuadrado, int i, int j, vector<int> &numeros, vector<int> &sumas, int numMagico,int ordenL) {
     //Asumiendo que conozco el numero mágico
@@ -32,12 +32,15 @@ int cuadradoMagicoConPodaK(vector<vector<int>> &cuadrado, int i, int j, vector<i
         }else{
             anterior=cuadrado;
         }*/
+        vector <int>cubo_i;
 
         for (int k = 0; k < n; ++k) {
             for (int l = 0; l < n; ++l) {
-                todos.insert(todos.end(),cuadrado[l][k]);
+                cubo_i.insert(cubo_i.end(),cuadrado[l][k]);
             }
         }
+        todos.insert(todos.end(),cubo_i);
+
         return 1;}// Si se completó la matriz es porque pasó todas las podas.
     int cantidad = 0; // Soluciones
     for (int k = 1; k <= n * n; k++) {
@@ -87,30 +90,43 @@ int cuadradoMagicoConPodaK(vector<vector<int>> &cuadrado, int i, int j, vector<i
     return cantidad;
 }
 vector<vector<int>> OrdenLex(int n, int k){
-
+    vector<int> test(n*n);
     int numM = (n*n*n + n)/2;
     vector<int> sumas ((2*n)+2);
     vector<int> candidatos (n * n,0);
     vector<vector<int>> cuadrado(n, vector<int>(n));
     int cuadrados =cuadradoMagicoConPodaK(cuadrado,0,0,candidatos,sumas,numM,k);
     int cual=0;
-    if (cuadrados!= todos.size()/(n*n)){
+    if (cuadrados!= todos.size()){
             vector<vector<int>> res (1, vector<int>(1,-1));
             return res;}
-    for (int i = 1; i <= cuadrados; ++i) {
-        for (int p = 0; p < n*n; ++p) {
-            if (todos[i*(n*n) + p] < todos[((cual)*n*n) + p]) {
-                cual = i; //
-                break;
+    for (int o=0;o<cuadrados;o++) {
+        for (int i = 1; i < cuadrados; ++i) {
+            for (int p = 0; p < n * n; ++p) {/*
+                if (todos[i * (n * n) + p] == todos[((cual) * n * n) + p]) continue;
+                if (todos[i * (n * n) + p] > todos[((cual) * n * n) + p]) break;
+                if (todos[i * (n * n) + p] < todos[((cual) * n * n) + p]) {
+                    cual = i; //el próximo es mas grande
+                    break;*/
+                if (todos[i][p] == todos[(cual)][p]) continue;
+                if (todos[i] [p] > todos[cual][p]) break;
+                if (todos[i]  [p] < todos[cual][p]) {
+                    cual = i; //el próximo es mas grande
+                    break;
+                }
             }
         }
-    }
-    for (int i = 0; i < n; ++i) {{
-            for (int j = 0; j < n; ++j) {
-                cuadrado[i][j]=todos[(cual*n*n)+j+i];
+        if (o+1==k){
+            for (int i = 0; i < test.size(); ++i) {
+               test[i]=todos[cual][i];
+            }
+        } else {
+                swap(todos[o],todos[cual]);
             }
     }
-
+    for (int i = 0; i < n; ++i) {
+            for (int j = 0; j < n; ++j) {
+            }
     }
         /*if (check == k) {
              for (auto i = 0; i < n; i++) {

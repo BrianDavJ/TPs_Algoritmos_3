@@ -126,6 +126,7 @@ vector<vector<int>> OrdenLex(int n, int k){
     }
     for (int i = 0; i < n; ++i) {
             for (int j = 0; j < n; ++j) {
+                cuadrado[i][j]=todos[cual][j+(i*n)];
             }
     }
         /*if (check == k) {

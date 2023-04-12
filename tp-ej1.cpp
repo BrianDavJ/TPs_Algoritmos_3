@@ -131,14 +131,13 @@ int main() {
     //Ejercicio 1
     int n;
     int k;
-    cout << "Introducir n y k " << endl;
     // Initialize arguments.
     cin >> n >> k;
 
     vector<int> r3 = OrdenLex(n, k);
     for (int i=0; i<r3.size();i++){
             cout << r3[i] << " ";
-            if(i%n == n-1) cout << endl ;
+            if(i%n == n-1 %% i != r3.size()-1) cout << endl ;
     }
 
     return 0;

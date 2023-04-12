@@ -12,7 +12,7 @@ vector<int> candidatos;
 vector<int> sumas;
 const float infinity = numeric_limits<float>::infinity();
 vector<vector<int>> todos ;
-
+int cantidad=0;
 int cuadradoMagicoConPodaK(vector<vector<int>> &cuadrado, int i, int j, vector<int> &numeros, vector<int> &sumas, int numMagico,int ordenL) {
     //Asumiendo que conozco el numero mágico
     // sumas es un vector donde los primeros n numeros son las sumas de las n filas, los proximos n son de las columnas y los ultimos 2 de las diagonales
@@ -20,16 +20,16 @@ int cuadradoMagicoConPodaK(vector<vector<int>> &cuadrado, int i, int j, vector<i
     if (j == n) return cuadradoMagicoConPodaK(cuadrado, i + 1, 0, numeros, sumas,numMagico,ordenL); // Voy a la próxima fila.
     if (i == n){
         vector <int>cubo_i;
-
         for (int k = 0; k < n; ++k) {
             for (int l = 0; l < n; ++l) {
-                cubo_i.insert(cubo_i.end(),cuadrado[l][k]);
+                cubo_i.insert(cubo_i.end(),cuadrado[k][l]);
             }
         }
         todos.insert(todos.end(),cubo_i);
-
-        return 1;}// Si se completó la matriz es porque pasó todas las podas.
-    int cantidad = 0; // Soluciones
+        cantidad+=1;
+        return cantidad;}
+    // Si se completó la matriz es porque pasó todas las podas.
+    // Soluciones
     for (int k = 1; k <= n * n; k++) {
         if (numeros[k - 1] == 1) continue; // Corto si el numero k fue usado.
 
@@ -61,10 +61,11 @@ int cuadradoMagicoConPodaK(vector<vector<int>> &cuadrado, int i, int j, vector<i
         sumas[n + j] += k; // hago la suma parcial de  la columna "j"
         if (i == j) { sumas[2 * n] += k; } //hago la suma parcial de  la primera diagonal
         if (i == n - 1 - j) { sumas[2 * n + 1] += k; } // hago la suma parcial de la segunda diagonal
-        cantidad += cuadradoMagicoConPodaK(cuadrado, i, j + 1, numeros, sumas, numMagico,ordenL);
-       /* if (cantidad == ordenL) {
-            break;
-        }*/
+        cantidad = cuadradoMagicoConPodaK(cuadrado, i, j + 1, numeros, sumas, numMagico,ordenL);
+        if (cantidad == ordenL) {
+
+            return cantidad;
+        }
         // reseteo los datos para la proxima rama
         cuadrado[i][j] -= k;
         numeros[k - 1] = 0;
@@ -81,49 +82,19 @@ vector<int> OrdenLex(int n, int k){
     vector<int> sumas ((2*n)+2);
     vector<int> candidatos (n * n,0);
     vector<vector<int>> cuadrado(n, vector<int>(n));
-    int cuadrados =cuadradoMagicoConPodaK(cuadrado,0,0,candidatos,sumas,numM,k);
+    int CantCuadrados =cuadradoMagicoConPodaK(cuadrado,0,0,candidatos,sumas,numM,k);
 
-    if (k > cuadrados || k < 1) {
+    if (k > CantCuadrados || k < 1) {
         vector<int> invalido(1,-1);
         return invalido;
     }
 
     int cual=0;
 
-    if (cuadrados!= todos.size()){
+    if (CantCuadrados!= todos.size()){
             vector<int> res(1,-1);
             return res;}
 
-    for (int o=0;o<k;o++) {
-        cual = o;
-        for (int i = o+1; i < cuadrados; ++i) {
-            for (int p = 0; p < n * n; ++p) {
-                
-                if (todos[i][p] == todos[(cual)][p]) continue;
-                if (todos[i][p] > todos[cual][p]) break;
-                if (todos[i][p] < todos[cual][p]) {
-                    cual = i; //el próximo es mas grande
-                    break;
-                }
-            }
-        }
-        
-        vector<int> temp = todos[o];
-        todos[o] = todos[cual];
-        todos[cual] = temp;
-        
-        
-        
-        /* for (int i=0; i<todos[cual].size();i++){
-        cout << todos[cual][i] << " ";
-        if(i%n == n-1) cout << endl ;
-          
-        for (int i=0; i<todos[o].size();i++){
-        cout << todos[o][i] << " ";
-        if(i%n == n-1) cout << endl ;  
-        }*/
-    
-    }
 
     return todos[k-1];
 }
@@ -137,7 +108,7 @@ int main() {
     vector<int> r3 = OrdenLex(n, k);
     for (int i=0; i<r3.size();i++){
             cout << r3[i] << " ";
-            if(i%n == n-1 %% i != r3.size()-1) cout << endl ;
+            if(i%n == n-1 && i != r3.size()-1) cout << endl ;
     }
 
     return 0;

@@ -89,46 +89,45 @@ int cuadradoMagicoConPodaK(vector<vector<int>> &cuadrado, int i, int j, vector<i
     }
     return cantidad;
 }
-vector<vector<int>> OrdenLex(int n, int k){
+vector<int> OrdenLex(int n, int k){
     vector<int> test(n*n);
     int numM = (n*n*n + n)/2;
     vector<int> sumas ((2*n)+2);
     vector<int> candidatos (n * n,0);
     vector<vector<int>> cuadrado(n, vector<int>(n));
     int cuadrados =cuadradoMagicoConPodaK(cuadrado,0,0,candidatos,sumas,numM,k);
+
+    if (k > cuadrados || k < 1) {
+        vector<int> invalido(1,-1);
+        return invalido;
+    }
+
     int cual=0;
+
     if (cuadrados!= todos.size()){
-            vector<vector<int>> res (1, vector<int>(1,-1));
+            vector<int> res(1,-1);
             return res;}
-    for (int o=0;o<cuadrados;o++) {
-        for (int i = 1; i < cuadrados; ++i) {
+
+    for (int o=0;o<k;o++) {
+        cual = o;
+        for (int i = o; i < cuadrados; ++i) {
             for (int p = 0; p < n * n; ++p) {/*
                 if (todos[i * (n * n) + p] == todos[((cual) * n * n) + p]) continue;
                 if (todos[i * (n * n) + p] > todos[((cual) * n * n) + p]) break;
                 if (todos[i * (n * n) + p] < todos[((cual) * n * n) + p]) {
                     cual = i; //el próximo es mas grande
                     break;*/
-                if (todos[i][p] == todos[(cual)][p]) continue;
-                if (todos[i] [p] > todos[cual][p]) break;
-                if (todos[i]  [p] < todos[cual][p]) {
+                if (todos[i][p] == todos[cual][p]) continue;
+                if (todos[i][p]  > todos[cual][p]) break;
+                if (todos[i][p]  < todos[cual][p]) {
                     cual = i; //el próximo es mas grande
                     break;
                 }
             }
         }
-        if (o+1==k){
-            for (int i = 0; i < test.size(); ++i) {
-               test[i]=todos[cual][i];
-            }
-        } else {
-                swap(todos[o],todos[cual]);
-            }
+        swap(todos[o],todos[cual]);
     }
-    for (int i = 0; i < n; ++i) {
-            for (int j = 0; j < n; ++j) {
-                cuadrado[i][j]=todos[cual][j+(i*n)];
-            }
-    }
+
         /*if (check == k) {
              for (auto i = 0; i < n; i++) {
                 for (int j = 0; j < n; ++j) {
@@ -140,7 +139,7 @@ vector<vector<int>> OrdenLex(int n, int k){
             vector<vector<int>> res (1, vector<int>(1,-1));
             return res;}
         */
-    return cuadrado;
+    return todos[k-1];
 }
 int main() {
     //Ejercicio 1
@@ -148,15 +147,12 @@ int main() {
     int k;
     cout << "Introducir n y k " << endl;
     // Initialize arguments.
-    cin >> n;
-    cin >> k;
+    cin >> n >> k;
 
-    vector<vector<int>> r3 = OrdenLex(n, k);
+    vector<int> r3 = OrdenLex(n, k);
     for (int i=0; i<r3.size();i++){
-        for (int j = 0; j < r3.size(); ++j) {
-            cout << r3[i][j] << " ";
-        }
-        cout << endl;
+            cout << r3[i] << " ";
+            if(i%n == n-1) cout << endl ;
     }
 
     return 0;

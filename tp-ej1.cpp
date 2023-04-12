@@ -19,19 +19,6 @@ int cuadradoMagicoConPodaK(vector<vector<int>> &cuadrado, int i, int j, vector<i
     int n = cuadrado.size();
     if (j == n) return cuadradoMagicoConPodaK(cuadrado, i + 1, 0, numeros, sumas,numMagico,ordenL); // Voy a la próxima fila.
     if (i == n){
-/*        int check=0;
-        for (int k = 0; k < n; ++k) {
-            for (int l = 0; l < n; ++l) {
-                if (anterior[k][j]<cuadrado[k][j]){
-                  check=1;
-                }
-            }
-        }
-        if (check){
-            cuadrado=anterior;
-        }else{
-            anterior=cuadrado;
-        }*/
         vector <int>cubo_i;
 
         for (int k = 0; k < n; ++k) {
@@ -90,7 +77,6 @@ int cuadradoMagicoConPodaK(vector<vector<int>> &cuadrado, int i, int j, vector<i
     return cantidad;
 }
 vector<int> OrdenLex(int n, int k){
-    vector<int> test(n*n);
     int numM = (n*n*n + n)/2;
     vector<int> sumas ((2*n)+2);
     vector<int> candidatos (n * n,0);
@@ -110,35 +96,35 @@ vector<int> OrdenLex(int n, int k){
 
     for (int o=0;o<k;o++) {
         cual = o;
-        for (int i = o; i < cuadrados; ++i) {
-            for (int p = 0; p < n * n; ++p) {/*
-                if (todos[i * (n * n) + p] == todos[((cual) * n * n) + p]) continue;
-                if (todos[i * (n * n) + p] > todos[((cual) * n * n) + p]) break;
-                if (todos[i * (n * n) + p] < todos[((cual) * n * n) + p]) {
-                    cual = i; //el próximo es mas grande
-                    break;*/
-                if (todos[i][p] == todos[cual][p]) continue;
-                if (todos[i][p]  > todos[cual][p]) break;
-                if (todos[i][p]  < todos[cual][p]) {
+        for (int i = o+1; i < cuadrados; ++i) {
+            for (int p = 0; p < n * n; ++p) {
+                
+                if (todos[i][p] == todos[(cual)][p]) continue;
+                if (todos[i][p] > todos[cual][p]) break;
+                if (todos[i][p] < todos[cual][p]) {
                     cual = i; //el próximo es mas grande
                     break;
                 }
             }
         }
-        swap(todos[o],todos[cual]);
+        
+        vector<int> temp = todos[o];
+        todos[o] = todos[cual];
+        todos[cual] = temp;
+        
+        
+        
+        /* for (int i=0; i<todos[cual].size();i++){
+        cout << todos[cual][i] << " ";
+        if(i%n == n-1) cout << endl ;
+          
+        for (int i=0; i<todos[o].size();i++){
+        cout << todos[o][i] << " ";
+        if(i%n == n-1) cout << endl ;  
+        }*/
+    
     }
 
-        /*if (check == k) {
-             for (auto i = 0; i < n; i++) {
-                for (int j = 0; j < n; ++j) {
-                    cout << cuadrado[j][i] << endl;
-                }
-            }
-            return cuadrado;
-        } else {
-            vector<vector<int>> res (1, vector<int>(1,-1));
-            return res;}
-        */
     return todos[k-1];
 }
 int main() {

@@ -10,7 +10,6 @@ using namespace std;
 
 vector<int> candidatos;
 vector<int> sumas;
-vector<vector<int>> todos ;
 int cantidad=0;
 
 int cuadradoMagicoConPodaK(vector<vector<int>> &cuadrado, int i, int j, vector<int> &numeros, int numMagico,int ordenL) {

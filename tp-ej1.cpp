@@ -10,22 +10,16 @@ using namespace std;
 
 vector<int> candidatos;
 vector<int> sumas;
-const float infinity = numeric_limits<float>::infinity();
 vector<vector<int>> todos ;
 int cantidad=0;
-int cuadradoMagicoConPodaK(vector<vector<int>> &cuadrado, int i, int j, vector<int> &numeros, vector<int> &sumas, int numMagico,int ordenL) {
+
+int cuadradoMagicoConPodaK(vector<vector<int>> &cuadrado, int i, int j, vector<int> &numeros, int numMagico,int ordenL) {
+
     //Asumiendo que conozco el numero mágico
     // sumas es un vector donde los primeros n numeros son las sumas de las n filas, los proximos n son de las columnas y los ultimos 2 de las diagonales
     int n = cuadrado.size();
-    if (j == n) return cuadradoMagicoConPodaK(cuadrado, i + 1, 0, numeros, sumas,numMagico,ordenL); // Voy a la próxima fila.
+    if (j == n) return cuadradoMagicoConPodaK(cuadrado, i + 1, 0, numeros,numMagico,ordenL); // Voy a la próxima fila.
     if (i == n){
-        vector <int>cubo_i;
-        for (int k = 0; k < n; ++k) {
-            for (int l = 0; l < n; ++l) {
-                cubo_i.insert(cubo_i.end(),cuadrado[k][l]);
-            }
-        }
-        todos.insert(todos.end(),cubo_i);
         cantidad+=1;
         return cantidad;}
     // Si se completó la matriz es porque pasó todas las podas.
@@ -35,14 +29,17 @@ int cuadradoMagicoConPodaK(vector<vector<int>> &cuadrado, int i, int j, vector<i
 
         if (sumas[i] + k > numMagico) continue; // Veo que la suma parcial no se pasó
 
-        if (j == n - 1 && sumas[i] + k != numMagico)
+
+        if ((j == n - 1) && (sumas[i] + k != numMagico))
             continue; //Si estoy por completar la fila veo si la suma de toda la fila da el número magico
 
         if (sumas[n + j] > numMagico)
             continue; // voy hasta la suma de la columna j y veo que la suma parcial no se pasó
 
+
         if (i == n - 1 && sumas[n + j] + k != numMagico)
             continue; //Si estoy por completar la fila veo si la suma de toda la fila da el número magico
+
 
         if (i == j && sumas[2 * n] > numMagico) continue; // Veo si la suma parcial de la diagonal (i,i) se pasa
 
@@ -61,7 +58,7 @@ int cuadradoMagicoConPodaK(vector<vector<int>> &cuadrado, int i, int j, vector<i
         sumas[n + j] += k; // hago la suma parcial de  la columna "j"
         if (i == j) { sumas[2 * n] += k; } //hago la suma parcial de  la primera diagonal
         if (i == n - 1 - j) { sumas[2 * n + 1] += k; } // hago la suma parcial de la segunda diagonal
-        cantidad = cuadradoMagicoConPodaK(cuadrado, i, j + 1, numeros, sumas, numMagico,ordenL);
+        cantidad = cuadradoMagicoConPodaK(cuadrado, i, j + 1, numeros, numMagico,ordenL);
         if (cantidad == ordenL) {
 
             return cantidad;
@@ -77,26 +74,18 @@ int cuadradoMagicoConPodaK(vector<vector<int>> &cuadrado, int i, int j, vector<i
     }
     return cantidad;
 }
-vector<int> OrdenLex(int n, int k){
+vector<vector<int>> OrdenLex(int n, int k){
     int numM = (n*n*n + n)/2;
-    vector<int> sumas ((2*n)+2);
+    sumas = vector<int> ((2*n)+2);
     vector<int> candidatos (n * n,0);
     vector<vector<int>> cuadrado(n, vector<int>(n));
-    int CantCuadrados =cuadradoMagicoConPodaK(cuadrado,0,0,candidatos,sumas,numM,k);
 
+    int CantCuadrados =cuadradoMagicoConPodaK(cuadrado,0,0,candidatos,numM,k);
     if (k > CantCuadrados || k < 1) {
-        vector<int> invalido(1,-1);
+        vector<vector<int>> invalido(1,vector<int>(1,-1));
         return invalido;
     }
-
-    int cual=0;
-
-    if (CantCuadrados!= todos.size()){
-            vector<int> res(1,-1);
-            return res;}
-
-
-    return todos[k-1];
+    return cuadrado;
 }
 int main() {
     //Ejercicio 1
@@ -105,11 +94,13 @@ int main() {
     // Initialize arguments.
     cin >> n >> k;
 
-    vector<int> r3 = OrdenLex(n, k);
-    for (int i=0; i<r3.size();i++){
-            cout << r3[i] << " ";
-            if(i%n == n-1 && i != r3.size()-1) cout << endl ;
-    }
+    vector<vector<int>> r3 = OrdenLex(n, k);
 
+    for (int i=0; i<r3.size();i++) {
+        for (int j = 0; j < r3.size(); j++) {
+            cout << r3[i][j] << " ";
+        }
+        cout << endl;
+    }
     return 0;
 }

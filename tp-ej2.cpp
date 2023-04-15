@@ -21,11 +21,11 @@ long long int mod_bin_expM(int x, int y, int m) {
     }
 }
 
-bool operaciones(vector<int> v, int r, int m, int index, int restoParcial,int op){
+bool operaciones(vector<int> v, int r, int m, int index, long long int restoParcial,int op){
     bool res = false;
 
     if(mem[index][restoParcial][op] == -1){
-        long long temp;
+        long long int temp;
         switch (op)
         {
             case 0:
@@ -78,7 +78,7 @@ int main(){
         bool res = operaciones(v,r,m,0,0,0);
 
         if (res) cout << "Si" << endl;
-        else cout << "No" << endl;
+        else     cout << "No" << endl;
     }
     return 0;
 }

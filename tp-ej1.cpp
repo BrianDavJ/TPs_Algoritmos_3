@@ -90,7 +90,7 @@ int main() {
     //Ejercicio 1
     int n;
     int k;
-    // Initialize arguments.
+    // Inicializo los argumentos.
     cin >> n >> k;
 
     vector<vector<int>> r3 = OrdenLex(n, k);

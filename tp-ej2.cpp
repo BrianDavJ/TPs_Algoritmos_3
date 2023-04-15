@@ -25,25 +25,25 @@ bool operaciones(vector<int> v, int r, int m, int index, int restoParcial,int op
     bool res = false;
 
     if(mem[index][restoParcial][op] == -1){
-        int temp;
+        long long temp;
         switch (op)
         {
             case 0:
-                temp = (restoParcial + v[index]) % m;
+                temp = (restoParcial + (v[index]%m)) % m;
                 break;
             case 1:
-                cerr << "llego" << endl;
-                temp = (restoParcial - v[index]) % m;
+                temp = (restoParcial - (v[index]%m)) % m;
+                if (temp < 0) temp += m;
                 break;
             case 2:
-                temp = (restoParcial * v[index]) % m;
+                temp = (restoParcial * (v[index]%m)) % m;
                 break;
             case 3:
                 temp = mod_bin_expM(restoParcial,v[index],m);
                 break;
         }
         if (index==v.size()-1){
-            mem[index-1][temp][op]=temp % m == r;
+            mem[index][temp][op]=temp % m == r;
             return temp % m == r;
         }else{
             for(int i = 0; i < 4; i ++){
@@ -80,6 +80,5 @@ int main(){
         if (res) cout << "Si" << endl;
         else cout << "No" << endl;
     }
-
     return 0;
 }

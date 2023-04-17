@@ -1,6 +1,3 @@
-//
-// Created by Brian on 11/4/2023.
-//
 #include <iostream>
 #include <vector>
 #include <math.h>
@@ -87,7 +84,6 @@ vector<vector<int>> OrdenLex(int n, int k){
     return cuadrado;
 }
 int main() {
-    //Ejercicio 1
     int n;
     int k;
     // Inicializo los argumentos.

@@ -5,7 +5,7 @@
 using namespace std;
 
 long long C;
-vector<vector<vector<int>>> mem;
+vector<vector<int>> mem;
 
 long long int mod_bin_expM(int x, int y, int m) {//Calcula mediante un algoritmo D&C, el resto de la potencia, sin exceder el tamanio de memoria del dato
 
@@ -24,9 +24,10 @@ long long int mod_bin_expM(int x, int y, int m) {//Calcula mediante un algoritmo
 bool operaciones(vector<long long > v, long long r, long long m, int index, long long int restoParcial,int op){
     bool res = false;
 
+    if (index == v.size()) return restoParcial % m == r;
 
-    //Si en la posicion correspondiente de la matriz tenemos NULL, realizamos el calculo recursivo
-    if(mem[index][restoParcial][op] == -1){
+    //Si en la posicion correspondiente de la matriz tenemos -1, realizamos el calculo recursivo
+
         long long int temp;
         switch (op)//Realizamos la operacion indicada por parametro, asegurandonos de no conservar un resto negativo
         {
@@ -44,26 +45,24 @@ bool operaciones(vector<long long > v, long long r, long long m, int index, long
                 break;
             case 3:
                 if (restoParcial == 0 && v[index] == 0){// 0 ^ 0 INDETERMINADO, no podemos realizar esta operacion
-                    mem[index][restoParcial][op] = false;
+                    mem[index][restoParcial] = false;
                     return false;
                 }
                 temp = mod_bin_expM(restoParcial,v[index],m);
                 break;
         }
-        if (index==v.size()-1){
-            mem[index][temp][op] = (temp % m == r);
-            return temp % m == r;
-        }else{
-            for(int i = 0; i < 4; i ++){
-                res = res || operaciones(v, r, m, index+1, temp, i);
-            }
+
+    if(mem[index][temp] == -1){
+
+        for(int i = 0; i < 4; i ++){
+            res = res || operaciones(v, r, m, index+1, temp, i);
         }
-        mem[index][temp][op] = res;
+        mem[index][temp] = res;
         return res;
     }
 
-    //Si la matriz contenia un valor valido, este caso ya fue calculado y lo retorno
-    else return mem[index][restoParcial][op];
+    //Si la matriz contenia un valor valido, este caso ya fue calculado y lo retorno.
+    else return mem[index][temp];
 
 }
 
@@ -78,11 +77,10 @@ int main(){//Ejercicio 2
         cin >> r;
         cin >> m;
 
-        //La memoria tiene dimensiones |v| * m * 4
-        //En la posicion [n][r][k] de la matriz, se encuentra un "booleano" que nos indica si es posible llegar a la solucion deseada
-        //desde la posicion n del vector, teniendo un resto parcial r, realizando la operacion k.
-        //De haber un NULL, no ha sido calculado aun.
-        mem = vector<vector<vector<int>>>(size,vector<vector<int>>(m,vector<int>(4,-1)));
+        //La memoria tiene dimensiones |v| * m
+        //En la posicion [n][r] de la matriz, se encuentra un "booleano" que nos indica si es posible llegar a la solucion deseada
+        //desde la posicion n del vector, teniendo un resto parcial r. De haber un -1, no ha sido calculado aun.
+        mem = vector<vector<int>>(size,vector<int>(m,-1));
 
         vector<long long> v(size);
 

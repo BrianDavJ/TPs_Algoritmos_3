@@ -29,7 +29,7 @@ bool operaciones(vector<long long > v, long long r, long long m, int index, long
 
     if (index == v.size()) return restoParcial % m == r;
 
-    //Si en la posicion correspondiente de la matriz tenemos -1, realizamos el calculo recursivo
+    
 
         long long int temp;
         switch (op)//Realizamos la operacion indicada por parametro, asegurandonos de no conservar un resto negativo
@@ -58,7 +58,7 @@ bool operaciones(vector<long long > v, long long r, long long m, int index, long
         }
 
     tuple<int,int> tup = make_tuple(index,temp);
-    if(!memjorada.count(tup)){
+    if(!memjorada.count(tup)){//Si en la posicion correspondiente de la matriz (diccionario ahora )tenemos -1 (no esta definido), realizamos el calculo recursivo
 
         for(int i = 0; i < 4; i ++){
             res = res || operaciones(v, r, m, index+1, temp, i);

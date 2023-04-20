@@ -4,13 +4,18 @@
 #include <tuple>
 using namespace std;
 
-void bucktsort(vector <tuple<int,int>> Actividades){
-    int longitud=Actividades.size();
-    int rango=(2*longitud-1)/longitud;
-    vector<vector<tuple<int,int>>> balde;
-     for (int i = 0; i < 2*longitud; i++) {
+int C;
+vector<tuple<int,int>> Actividades;
+
+void bucktsort(vector<tuple<int,int>> Actividades){
+  int longitud=Actividades.size();
+  int rango=(2*longitud-1)/longitud;
+  vector<vector<tuple<int,int>>> balde;
+
+  for (int i = 0; i < 2*longitud; i++) {
     balde.push_back(vector<tuple<int,int>>(0));
   }
+
   for (int i = 0; i < longitud; i++) {
     int diff = (get<1>(Actividades[i]) - 1) / rango;
   
@@ -21,7 +26,8 @@ void bucktsort(vector <tuple<int,int>> Actividades){
       balde[(get<1>(Actividades[i]) - 1) / rango].push_back(Actividades[i]);
     }
   }
-   for (int i = 0; i < balde.size(); i++) {
+
+  for (int i = 0; i < balde.size(); i++) {
     if (!balde[i].empty()) {
       sort(balde[i].begin(), balde[i].end());
     }
@@ -37,23 +43,32 @@ void bucktsort(vector <tuple<int,int>> Actividades){
   }
 }
 
-
 vector<tuple<int,int>> agarrarPrimerosSinSolapar(vector<tuple<int,int>> Arr){
     vector<tuple<int,int>> res(0);
     res.push_back(Arr[0]);
     for(int i=1;i<Arr.size();i++){
-        if(get<1>(Arr[i-1]) <=get<0>(Arr[i])){
+        if(get<1>(res[res.size()-1]) <= get<0>(Arr[i])){
             res.push_back(Arr[i]);
         }
     }
     return res;
 }
 
-
 int main(){
-    vector<tuple<int,int>> grandeGoloSO(vector <tuple<int,int>> Actividades){
-        bucktsort(Actividades);
-        return agarrarPrimerosSinSolapar(Actividades);
-    }
-    return 0;
+  cin >> C;
+
+  int s_i;
+  int t_i;
+
+  for (int i = 0; i < C; i++){
+    cin >> s_i;
+    cin >> t_i;
+    tuple<int,int> tup = make_tuple(s_i, t_i);
+    Actividades.push_back(tup);
+  }
+
+  bucktsort(Actividades);
+  agarrarPrimerosSinSolapar(Actividades);
+
+  return 0;
 }

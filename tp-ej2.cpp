@@ -21,12 +21,11 @@ long long int mod_bin_expM(int x, int y, int m) {//Calcula mediante un algoritmo
     }
 }
 
+
 bool operaciones(vector<long long >& v, long long r, long long m, int index, long long int restoParcial,int op){
     bool res = false;
 
-
     if (index == v.size()) return restoParcial % m == r;
-
 
         long long int temp;
         switch (op)//Realizamos la operacion indicada por parametro, asegurandonos de no conservar un resto negativo
@@ -52,7 +51,6 @@ bool operaciones(vector<long long >& v, long long r, long long m, int index, lon
                 break;
         }
 
-
     //Si en la posicion de la matriz correspondiente a este indice y este resto tenemos -1, realizamos el calculo recursivo.
     if(mem[index][temp] == -1){
 
@@ -65,7 +63,6 @@ bool operaciones(vector<long long >& v, long long r, long long m, int index, lon
 
     //Si la matriz contenia un valor valido, este caso ya fue calculado y lo retorno.
     else return mem[index][temp];
-
 }
 
 
